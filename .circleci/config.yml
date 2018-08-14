@@ -8,6 +8,7 @@ jobs:
             path: ~/module
       - run: mkdir -p ~/workspace
       - run: cp -pr ~/module/.circleci/bin ~/bin
+      - run: chmod +x ~/bin/*.sh
       - run: mv ~/module/tests/ ~/layers/ # Move tests into layers directory
       - run:
           name: lint tests
@@ -29,6 +30,7 @@ jobs:
       - run:
           name: destroy
           command: cd ~ && ~/bin/destroy.sh  # must succeed or we have something to clean up manually
+          when: always
 
 workflows:
   version: 2
