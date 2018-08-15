@@ -1,3 +1,21 @@
+/**
+ * # aws-terraform-security_group
+ *
+ *This module creates the standard security groups for use on an account.
+ *
+ *## Basic Usage
+ *
+ *```
+ *module "security_groups" {
+ *  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.0.1"
+ *
+ *  resource_name = "Test-SG"
+ *  vpc_id        = "${module.vpc.vpc_id}"
+ *  environment   = "Production"
+ *}
+ *```
+ */
+
 locals {
   tags = {
     Environment     = "${var.environment}"
@@ -21,6 +39,13 @@ resource "aws_security_group" "public_rdp_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PublicRDPSecurityGroup"))}"
 }
 
@@ -33,6 +58,13 @@ resource "aws_security_group" "public_ssh_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -49,6 +81,13 @@ resource "aws_security_group" "private_ssh_security_group" {
     to_port         = 22
     protocol        = "tcp"
     security_groups = ["${aws_security_group.public_ssh_security_group.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateSSHSecurityGroup"))}"
@@ -87,6 +126,13 @@ resource "aws_security_group" "nfs_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-NFSSecurityGroup"))}"
 }
 
@@ -102,6 +148,13 @@ resource "aws_security_group" "mssql_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-MSSQLSecurityGroup"))}"
 }
 
@@ -115,6 +168,13 @@ resource "aws_security_group" "mysql_security_group" {
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-MYSQLSecurityGroup"))}"
@@ -136,6 +196,13 @@ resource "aws_security_group" "public_web_security_group" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -161,6 +228,13 @@ resource "aws_security_group" "private_web_security_group" {
     security_groups = ["${aws_security_group.public_web_security_group.id}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateWebSecurityGroup"))}"
 }
 
@@ -174,6 +248,13 @@ resource "aws_security_group" "private_ecs_security_group" {
     to_port         = 61000
     protocol        = "tcp"
     security_groups = ["${aws_security_group.public_web_security_group.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateECSSecurityGroup"))}"
@@ -191,6 +272,13 @@ resource "aws_security_group" "efs_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-EFSSecurityGroup"))}"
 }
 
@@ -204,6 +292,13 @@ resource "aws_security_group" "oracle_security_group" {
     to_port     = 1521
     protocol    = "tcp"
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-OracleSecurityGroup"))}"
@@ -221,6 +316,13 @@ resource "aws_security_group" "postgres_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PostgresSecurityGroup"))}"
 }
 
@@ -234,6 +336,13 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
     to_port     = 11211
     protocol    = "tcp"
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"))}"
@@ -251,6 +360,13 @@ resource "aws_security_group" "redshift_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-RedshiftSecurityGroup"))}"
 }
 
@@ -266,6 +382,13 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
     cidr_blocks = ["${data.aws_vpc.selected.cidr_block}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-ElasticCacheRedisSecurityGroup"))}"
 }
 
@@ -279,6 +402,13 @@ resource "aws_security_group" "private_rdp_security_group" {
     to_port         = 3389
     protocol        = "tcp"
     security_groups = ["${aws_security_group.public_rdp_security_group.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateRDPSecurityGroup"))}"
