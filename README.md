@@ -1,3 +1,19 @@
+# aws-terraform-security_group
+
+This module creates the standard security groups for use on an account.
+
+## Basic Usage
+
+```
+module "security_groups" {
+ source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.0.1"
+
+ resource_name = "Test-SG"
+ vpc_id        = "${module.vpc.vpc_id}"
+ environment   = "Production"
+}
+```
+
 
 ## Inputs
 
