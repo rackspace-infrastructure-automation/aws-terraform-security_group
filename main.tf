@@ -413,3 +413,32 @@ resource "aws_security_group" "private_rdp_security_group" {
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateRDPSecurityGroup"))}"
 }
+
+resource "aws_security_group" "vpc_endpoint_security_group" {
+  name        = "${var.resource_name}-VpcEndpointSecurityGroup"
+  description = "Allow HTTP and HTTPS traffic to endpoint"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = "${merge(local.tags, map("Name", "${var.resource_name}-VpcEndpointSecurityGroup"))}"
+}
