@@ -77,3 +77,7 @@ output "redshift_security_group_id" {
 output "private_ecs_security_group_id" {
   value = "${module.test_sg.private_ecs_security_group_id}"
 }
+
+output "vpc_endpoint_security_group_id" {
+  value = "${module.test_sg.vpc_endpoint_security_group_id}"
+}

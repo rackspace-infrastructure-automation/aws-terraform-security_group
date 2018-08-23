@@ -77,3 +77,8 @@ output "private_ecs_security_group_id" {
   description = "Private ECS Security Group ID"
   value       = "${aws_security_group.private_ecs_security_group.id}"
 }
+
+output "vpc_endpoint_security_group_id" {
+  description = "VPC Endpoint Security Group ID"
+  value       = "${aws_security_group.vpc_endpoint_security_group.id}"
+}
