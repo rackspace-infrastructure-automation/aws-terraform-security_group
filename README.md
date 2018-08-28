@@ -28,6 +28,8 @@ module "security_groups" {
 | Name | Description |
 |------|-------------|
 | efs_security_group_id | EFS Security Group ID |
+| eks_control_plane_security_group_id | EKS Control Plane Security Group ID |
+| eks_worker_security_group_id | EKS Worker Security Group ID |
 | elastic_cache_memcache_security_group_id | ElasticCache Memcache Security Group ID |
 | elastic_cache_redis_security_group_id | ElasticCache Redis Security Group ID |
 | mssql_security_group_id | MS SQL DB Security Group ID |
@@ -43,4 +45,5 @@ module "security_groups" {
 | public_ssh_security_group_id | Public SSH Security Group ID |
 | public_web_security_group_id | Public Web Security Group ID |
 | redshift_security_group_id | Redshift Security Group ID |
+| vpc_endpoint_security_group_id | VPC Endpoint Security Group ID |
 

@@ -48,6 +48,16 @@ output "efs_security_group_id" {
   value       = "${aws_security_group.efs_security_group.id}"
 }
 
+output "eks_control_plane_security_group_id" {
+  description = "EKS Control Plane Security Group ID"
+  value       = "${aws_security_group.eks_control_plane_security_group.id}"
+}
+
+output "eks_worker_security_group_id" {
+  description = "EKS Worker Security Group ID"
+  value       = "${aws_security_group.eks_worker_security_group.id}"
+}
+
 output "mssql_security_group_id" {
   description = "MS SQL DB Security Group ID"
   value       = "${aws_security_group.mssql_security_group.id}"
