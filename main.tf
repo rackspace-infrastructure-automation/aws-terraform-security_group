@@ -442,3 +442,75 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-VpcEndpointSecurityGroup"))}"
 }
+
+resource "aws_security_group" "eks_control_plane_security_group" {
+  name                   = "${var.resource_name}-EksControlPlaneSecurityGroup"
+  description            = "Allow traffic between EKS control plane and EKS cluster nodes."
+  revoke_rules_on_delete = true
+  vpc_id                 = "${var.vpc_id}"
+
+  tags = "${merge(local.tags, map("Name", "${var.resource_name}-EksControlPlaneSecurityGroup"))}"
+}
+
+resource "aws_security_group_rule" "eks_control_plane_ingress" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = "${aws_security_group.eks_worker_security_group.id}"
+  description              = "Allow ingress HTTPS traffic from worker"
+
+  security_group_id = "${aws_security_group.eks_control_plane_security_group.id}"
+}
+
+resource "aws_security_group_rule" "eks_control_plane_egress" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "all"
+  source_security_group_id = "${aws_security_group.eks_worker_security_group.id}"
+  description              = "Allow all egress traffic to EKS worker nodes"
+
+  security_group_id = "${aws_security_group.eks_control_plane_security_group.id}"
+}
+
+resource "aws_security_group" "eks_worker_security_group" {
+  name                   = "${var.resource_name}-EksWorkerSecurityGroup"
+  description            = "Allow traffic from EKS cluster nodes."
+  revoke_rules_on_delete = true
+  vpc_id                 = "${var.vpc_id}"
+
+  ingress {
+    from_port       = 1025
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.public_web_security_group.id}"]
+    description     = "Allow ingress traffic from public web server security group"
+  }
+
+  ingress {
+    from_port       = 1025
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.eks_control_plane_security_group.id}"]
+    description     = "Allow ingress traffic from EKS control plane security group"
+  }
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+    description = "Allow all ingress traffic from other members of this security group"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all egress traffic"
+  }
+
+  tags = "${merge(local.tags, map("Name", "${var.resource_name}-EksWorkerSecurityGroup"))}"
+}
