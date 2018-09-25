@@ -29,7 +29,7 @@ data "aws_vpc" "selected" {
 
 resource "aws_security_group" "public_rdp_security_group" {
   name        = "${var.resource_name}-PublicRDPSecurityGroup"
-  description = "Allow rdp traffic"
+  description = "Public RDP Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -51,7 +51,7 @@ resource "aws_security_group" "public_rdp_security_group" {
 
 resource "aws_security_group" "public_ssh_security_group" {
   name        = "${var.resource_name}-PublicSSHSecurityGroup"
-  description = "Allow ssh traffic"
+  description = "Public SSH Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -73,7 +73,7 @@ resource "aws_security_group" "public_ssh_security_group" {
 
 resource "aws_security_group" "private_ssh_security_group" {
   name        = "${var.resource_name}-PrivateSSHSecurityGroup"
-  description = "Allow ssh traffic"
+  description = "Private SSH Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -95,7 +95,7 @@ resource "aws_security_group" "private_ssh_security_group" {
 
 resource "aws_security_group" "nfs_security_group" {
   name        = "${var.resource_name}-NFSSecurityGroup"
-  description = "Allow NFS traffic"
+  description = "NFS Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -138,7 +138,7 @@ resource "aws_security_group" "nfs_security_group" {
 
 resource "aws_security_group" "mssql_security_group" {
   name        = "${var.resource_name}-MSSQLSecurityGroup"
-  description = "Allow MSSQL traffic"
+  description = "MSSQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -160,7 +160,7 @@ resource "aws_security_group" "mssql_security_group" {
 
 resource "aws_security_group" "mysql_security_group" {
   name        = "${var.resource_name}-MYSQLSecurityGroup"
-  description = "Allow MYSQL traffic"
+  description = "MySQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -182,7 +182,7 @@ resource "aws_security_group" "mysql_security_group" {
 
 resource "aws_security_group" "public_web_security_group" {
   name        = "${var.resource_name}-PublicWebSecurityGroup"
-  description = "Allow public WEB traffic to the load balancer"
+  description = "Public Web Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -211,7 +211,7 @@ resource "aws_security_group" "public_web_security_group" {
 
 resource "aws_security_group" "private_web_security_group" {
   name        = "${var.resource_name}-PrivateWebSecurityGroup"
-  description = "Allow private WEB traffic to the load balancer"
+  description = "Private Web Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -240,7 +240,7 @@ resource "aws_security_group" "private_web_security_group" {
 
 resource "aws_security_group" "private_ecs_security_group" {
   name        = "${var.resource_name}-PrivateECSSecurityGroup"
-  description = "Allow public WEB traffic to ephemeral ports on ECS cluster."
+  description = "Private ECS Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -262,7 +262,7 @@ resource "aws_security_group" "private_ecs_security_group" {
 
 resource "aws_security_group" "efs_security_group" {
   name        = "${var.resource_name}-EFSSecurityGroup"
-  description = "Allow EFS traffic."
+  description = "EFS Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -284,7 +284,7 @@ resource "aws_security_group" "efs_security_group" {
 
 resource "aws_security_group" "oracle_security_group" {
   name        = "${var.resource_name}-OracleSecurityGroup"
-  description = "Allow Oracle DB traffic."
+  description = "Oracle Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -306,7 +306,7 @@ resource "aws_security_group" "oracle_security_group" {
 
 resource "aws_security_group" "postgres_security_group" {
   name        = "${var.resource_name}-PostgresSecurityGroup"
-  description = "Allow Postgres DB traffic."
+  description = "PostgreSQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -328,7 +328,7 @@ resource "aws_security_group" "postgres_security_group" {
 
 resource "aws_security_group" "elastic_cache_memcache_security_group" {
   name        = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
-  description = "Allow ElasticCache Memcache traffic."
+  description = "ElastiCache Memcache Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -350,7 +350,7 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
 
 resource "aws_security_group" "redshift_security_group" {
   name        = "${var.resource_name}-RedshiftSecurityGroup"
-  description = "Allow Redshift traffic."
+  description = "Redshift Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -372,7 +372,7 @@ resource "aws_security_group" "redshift_security_group" {
 
 resource "aws_security_group" "elastic_cache_redis_security_group" {
   name        = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
-  description = "Allow ElasticCache Redis traffic."
+  description = "ElastiCache Redis Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -394,7 +394,7 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
 
 resource "aws_security_group" "private_rdp_security_group" {
   name        = "${var.resource_name}-PrivateRDPSecurityGroup"
-  description = "Allow private RDP traffic from load balancer."
+  description = "Private RDP Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -416,7 +416,7 @@ resource "aws_security_group" "private_rdp_security_group" {
 
 resource "aws_security_group" "vpc_endpoint_security_group" {
   name        = "${var.resource_name}-VpcEndpointSecurityGroup"
-  description = "Allow HTTP and HTTPS traffic to endpoint"
+  description = "VPC Endpoint Security Group"
   vpc_id      = "${var.vpc_id}"
 
   ingress {
@@ -445,7 +445,7 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
 
 resource "aws_security_group" "eks_control_plane_security_group" {
   name                   = "${var.resource_name}-EksControlPlaneSecurityGroup"
-  description            = "Allow traffic between EKS control plane and EKS cluster nodes."
+  description            = "EKS Control Plane Security Group"
   revoke_rules_on_delete = true
   vpc_id                 = "${var.vpc_id}"
 
@@ -476,7 +476,7 @@ resource "aws_security_group_rule" "eks_control_plane_egress" {
 
 resource "aws_security_group" "eks_worker_security_group" {
   name                   = "${var.resource_name}-EksWorkerSecurityGroup"
-  description            = "Allow traffic from EKS cluster nodes."
+  description            = "EKS Worker Security Group"
   revoke_rules_on_delete = true
   vpc_id                 = "${var.vpc_id}"
 
