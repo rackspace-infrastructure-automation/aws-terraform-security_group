@@ -4,12 +4,12 @@ provider "aws" {
 }
 
 module "base_network" {
-  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.1"
+  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.6"
   vpc_name = "SG-VPC-TEST"
 }
 
 module "test_sg" {
-  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.1"
+  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.5"
   resource_name = "my_test_sg"
   vpc_id        = "${module.base_network.vpc_id}"
 }
@@ -28,10 +28,10 @@ data "aws_ami" "amazon_centos_7" {
 data "aws_region" "current_region" {}
 
 module "ec2_ar_database" {
-  source         = "git@github.com:rackspace-infrastructure-automation/aws-terraform-ec2_autorecovery?ref=v0.0.1"
+  source         = "git@github.com:rackspace-infrastructure-automation/aws-terraform-ec2_autorecovery?ref=v0.0.6"
   ec2_os         = "centos7"
   instance_count = "3"
-  ec2_subnet     = "${element(module.base_network.private_subnets, 0)}"
+  subnets        = ["${module.base_network.private_subnets}"]
 
   ### Example security group module reference
   security_group_list = ["${module.test_sg.public_ssh_security_group_id}"]
