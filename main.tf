@@ -28,7 +28,7 @@ data "aws_vpc" "selected" {
 }
 
 resource "aws_security_group" "public_rdp_security_group" {
-  name        = "${var.resource_name}-PublicRDPSecurityGroup"
+  name_prefix = "${var.resource_name}-PublicRDPSecurityGroup"
   description = "Public RDP Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -46,11 +46,15 @@ resource "aws_security_group" "public_rdp_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PublicRDPSecurityGroup"))}"
 }
 
 resource "aws_security_group" "public_ssh_security_group" {
-  name        = "${var.resource_name}-PublicSSHSecurityGroup"
+  name_prefix = "${var.resource_name}-PublicSSHSecurityGroup"
   description = "Public SSH Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -68,11 +72,15 @@ resource "aws_security_group" "public_ssh_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PublicSSHSecurityGroup"))}"
 }
 
 resource "aws_security_group" "private_ssh_security_group" {
-  name        = "${var.resource_name}-PrivateSSHSecurityGroup"
+  name_prefix = "${var.resource_name}-PrivateSSHSecurityGroup"
   description = "Private SSH Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -90,11 +98,15 @@ resource "aws_security_group" "private_ssh_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateSSHSecurityGroup"))}"
 }
 
 resource "aws_security_group" "nfs_security_group" {
-  name        = "${var.resource_name}-NFSSecurityGroup"
+  name_prefix = "${var.resource_name}-NFSSecurityGroup"
   description = "NFS Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -133,11 +145,15 @@ resource "aws_security_group" "nfs_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-NFSSecurityGroup"))}"
 }
 
 resource "aws_security_group" "mssql_security_group" {
-  name        = "${var.resource_name}-MSSQLSecurityGroup"
+  name_prefix = "${var.resource_name}-MSSQLSecurityGroup"
   description = "MSSQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -155,11 +171,15 @@ resource "aws_security_group" "mssql_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-MSSQLSecurityGroup"))}"
 }
 
 resource "aws_security_group" "mysql_security_group" {
-  name        = "${var.resource_name}-MYSQLSecurityGroup"
+  name_prefix = "${var.resource_name}-MYSQLSecurityGroup"
   description = "MySQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -177,11 +197,15 @@ resource "aws_security_group" "mysql_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-MYSQLSecurityGroup"))}"
 }
 
 resource "aws_security_group" "public_web_security_group" {
-  name        = "${var.resource_name}-PublicWebSecurityGroup"
+  name_prefix = "${var.resource_name}-PublicWebSecurityGroup"
   description = "Public Web Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -206,11 +230,15 @@ resource "aws_security_group" "public_web_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PublicWebSecurityGroup"))}"
 }
 
 resource "aws_security_group" "private_web_security_group" {
-  name        = "${var.resource_name}-PrivateWebSecurityGroup"
+  name_prefix = "${var.resource_name}-PrivateWebSecurityGroup"
   description = "Private Web Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -235,11 +263,15 @@ resource "aws_security_group" "private_web_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateWebSecurityGroup"))}"
 }
 
 resource "aws_security_group" "private_ecs_security_group" {
-  name        = "${var.resource_name}-PrivateECSSecurityGroup"
+  name_prefix = "${var.resource_name}-PrivateECSSecurityGroup"
   description = "Private ECS Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -257,11 +289,15 @@ resource "aws_security_group" "private_ecs_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateECSSecurityGroup"))}"
 }
 
 resource "aws_security_group" "efs_security_group" {
-  name        = "${var.resource_name}-EFSSecurityGroup"
+  name_prefix = "${var.resource_name}-EFSSecurityGroup"
   description = "EFS Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -279,11 +315,15 @@ resource "aws_security_group" "efs_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-EFSSecurityGroup"))}"
 }
 
 resource "aws_security_group" "oracle_security_group" {
-  name        = "${var.resource_name}-OracleSecurityGroup"
+  name_prefix = "${var.resource_name}-OracleSecurityGroup"
   description = "Oracle Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -301,11 +341,15 @@ resource "aws_security_group" "oracle_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-OracleSecurityGroup"))}"
 }
 
 resource "aws_security_group" "postgres_security_group" {
-  name        = "${var.resource_name}-PostgresSecurityGroup"
+  name_prefix = "${var.resource_name}-PostgresSecurityGroup"
   description = "PostgreSQL Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -323,11 +367,15 @@ resource "aws_security_group" "postgres_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PostgresSecurityGroup"))}"
 }
 
 resource "aws_security_group" "elastic_cache_memcache_security_group" {
-  name        = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
+  name_prefix = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
   description = "ElastiCache Memcache Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -345,11 +393,15 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"))}"
 }
 
 resource "aws_security_group" "redshift_security_group" {
-  name        = "${var.resource_name}-RedshiftSecurityGroup"
+  name_prefix = "${var.resource_name}-RedshiftSecurityGroup"
   description = "Redshift Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -367,11 +419,15 @@ resource "aws_security_group" "redshift_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-RedshiftSecurityGroup"))}"
 }
 
 resource "aws_security_group" "elastic_cache_redis_security_group" {
-  name        = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
+  name_prefix = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
   description = "ElastiCache Redis Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -389,11 +445,15 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-ElasticCacheRedisSecurityGroup"))}"
 }
 
 resource "aws_security_group" "private_rdp_security_group" {
-  name        = "${var.resource_name}-PrivateRDPSecurityGroup"
+  name_prefix = "${var.resource_name}-PrivateRDPSecurityGroup"
   description = "Private RDP Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -411,11 +471,15 @@ resource "aws_security_group" "private_rdp_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-PrivateRDPSecurityGroup"))}"
 }
 
 resource "aws_security_group" "vpc_endpoint_security_group" {
-  name        = "${var.resource_name}-VpcEndpointSecurityGroup"
+  name_prefix = "${var.resource_name}-VpcEndpointSecurityGroup"
   description = "VPC Endpoint Security Group"
   vpc_id      = "${var.vpc_id}"
 
@@ -440,14 +504,22 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-VpcEndpointSecurityGroup"))}"
 }
 
 resource "aws_security_group" "eks_control_plane_security_group" {
-  name                   = "${var.resource_name}-EksControlPlaneSecurityGroup"
+  name_prefix            = "${var.resource_name}-EksControlPlaneSecurityGroup"
   description            = "EKS Control Plane Security Group"
   revoke_rules_on_delete = true
   vpc_id                 = "${var.vpc_id}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-EksControlPlaneSecurityGroup"))}"
 }
@@ -475,7 +547,7 @@ resource "aws_security_group_rule" "eks_control_plane_egress" {
 }
 
 resource "aws_security_group" "eks_worker_security_group" {
-  name                   = "${var.resource_name}-EksWorkerSecurityGroup"
+  name_prefix            = "${var.resource_name}-EksWorkerSecurityGroup"
   description            = "EKS Worker Security Group"
   revoke_rules_on_delete = true
   vpc_id                 = "${var.vpc_id}"
@@ -510,6 +582,10 @@ resource "aws_security_group" "eks_worker_security_group" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow all egress traffic"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = "${merge(local.tags, map("Name", "${var.resource_name}-EksWorkerSecurityGroup"))}"
