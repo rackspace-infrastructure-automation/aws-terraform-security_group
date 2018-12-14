@@ -9,7 +9,7 @@ module "base_network" {
 }
 
 module "test_sg" {
-  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.5"
+  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.6"
   resource_name = "my_test_sg"
   vpc_id        = "${module.base_network.vpc_id}"
 }
