@@ -14,36 +14,35 @@ module "security_groups" {
 }
 ```
 
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| environment | Application environment for which this network is being created. Preferred values are Development, Integration, PreProduction, Production, QA, Staging, or Test | string | `Development` | no |
-| resource_name | The name to be used for resources provisioned by this module | string | - | yes |
-| vpc_id | Provide Virtual Private Cloud ID in which security groups will be deployed | string | - | yes |
+| environment | Application environment for which this network is being created. Preferred values are Development, Integration, PreProduction, Production, QA, Staging, or Test | string | `"Development"` | no |
+| resource\_name | The name to be used for resources provisioned by this module | string | n/a | yes |
+| vpc\_id | Provide Virtual Private Cloud ID in which security groups will be deployed | string | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| efs_security_group_id | EFS Security Group ID |
-| eks_control_plane_security_group_id | EKS Control Plane Security Group ID |
-| eks_worker_security_group_id | EKS Worker Security Group ID |
-| elastic_cache_memcache_security_group_id | ElasticCache Memcache Security Group ID |
-| elastic_cache_redis_security_group_id | ElasticCache Redis Security Group ID |
-| mssql_security_group_id | MS SQL DB Security Group ID |
-| mysql_security_group_id | MySQL DB Security Group ID |
-| nfs_security_group_id | NFS Security Group ID |
-| oracle_security_group_id | Oracle DB Security Group ID |
-| postgres_security_group_id | Postgres DB Security Group ID |
-| private_ecs_security_group_id | Private ECS Security Group ID |
-| private_rdp_security_group_id | Private RDP Security Group ID |
-| private_ssh_security_group_id | Private SSH Security Group ID |
-| private_web_security_group_id | Private Web Security Group ID |
-| public_rdp_security_group_id | Public RDP Security Group ID |
-| public_ssh_security_group_id | Public SSH Security Group ID |
-| public_web_security_group_id | Public Web Security Group ID |
-| redshift_security_group_id | Redshift Security Group ID |
-| vpc_endpoint_security_group_id | VPC Endpoint Security Group ID |
+| efs\_security\_group\_id | EFS Security Group ID |
+| eks\_control\_plane\_security\_group\_id | EKS Control Plane Security Group ID |
+| eks\_worker\_security\_group\_id | EKS Worker Security Group ID |
+| elastic\_cache\_memcache\_security\_group\_id | ElasticCache Memcache Security Group ID |
+| elastic\_cache\_redis\_security\_group\_id | ElasticCache Redis Security Group ID |
+| mssql\_security\_group\_id | MS SQL DB Security Group ID |
+| mysql\_security\_group\_id | MySQL DB Security Group ID |
+| nfs\_security\_group\_id | NFS Security Group ID |
+| oracle\_security\_group\_id | Oracle DB Security Group ID |
+| postgres\_security\_group\_id | Postgres DB Security Group ID |
+| private\_ecs\_security\_group\_id | Private ECS Security Group ID |
+| private\_rdp\_security\_group\_id | Private RDP Security Group ID |
+| private\_ssh\_security\_group\_id | Private SSH Security Group ID |
+| private\_web\_security\_group\_id | Private Web Security Group ID |
+| public\_rdp\_security\_group\_id | Public RDP Security Group ID |
+| public\_ssh\_security\_group\_id | Public SSH Security Group ID |
+| public\_web\_security\_group\_id | Public Web Security Group ID |
+| redshift\_security\_group\_id | Redshift Security Group ID |
+| vpc\_endpoint\_security\_group\_id | VPC Endpoint Security Group ID |
 
