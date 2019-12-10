@@ -1,5 +1,9 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.2"
   region  = "us-west-2"
 }
 
@@ -11,5 +15,5 @@ module "base_network" {
 module "test_sg" {
   source        = "../../module"
   resource_name = "my_test_sg"
-  vpc_id        = "${module.base_network.vpc_id}"
+  vpc_id        = module.base_network.vpc_id
 }
