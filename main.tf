@@ -5,15 +5,26 @@
  *
  *## Basic Usage
  *
- *```
+ *```HCL
  *module "security_groups" {
- *  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.0.1"
+ *  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.12.0"
  *
- *  resource_name = "Test-SG"
+ *  name = "Test-SG"
  *  vpc_id        = "${module.vpc.vpc_id}"
  *  environment   = "Production"
  *}
  *```
+ *
+ *## Terraform 0.12 upgrade
+ *
+ *Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
+ *made when upgrading from a previous release to version 0.12.0 or higher.
+ *
+ *### Module variables
+ *
+ *The following module variables were updated to better meet current Rackspace style guides:
+ *
+ *- `resource_name` -> `name`
  */
 
 terraform {
@@ -37,7 +48,7 @@ data "aws_vpc" "selected" {
 
 resource "aws_security_group" "public_rdp_security_group" {
   description = "Public RDP Security Group"
-  name_prefix = "${var.resource_name}-PublicRDPSecurityGroup"
+  name_prefix = "${var.name}-PublicRDPSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -57,7 +68,7 @@ resource "aws_security_group" "public_rdp_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PublicRDPSecurityGroup"
+      "Name" = "${var.name}-PublicRDPSecurityGroup"
     },
   )
 
@@ -68,7 +79,7 @@ resource "aws_security_group" "public_rdp_security_group" {
 
 resource "aws_security_group" "public_ssh_security_group" {
   description = "Public SSH Security Group"
-  name_prefix = "${var.resource_name}-PublicSSHSecurityGroup"
+  name_prefix = "${var.name}-PublicSSHSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -88,7 +99,7 @@ resource "aws_security_group" "public_ssh_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PublicSSHSecurityGroup"
+      "Name" = "${var.name}-PublicSSHSecurityGroup"
     },
   )
 
@@ -99,7 +110,7 @@ resource "aws_security_group" "public_ssh_security_group" {
 
 resource "aws_security_group" "private_ssh_security_group" {
   description = "Private SSH Security Group"
-  name_prefix = "${var.resource_name}-PrivateSSHSecurityGroup"
+  name_prefix = "${var.name}-PrivateSSHSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -119,7 +130,7 @@ resource "aws_security_group" "private_ssh_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PrivateSSHSecurityGroup"
+      "Name" = "${var.name}-PrivateSSHSecurityGroup"
     },
   )
 
@@ -130,7 +141,7 @@ resource "aws_security_group" "private_ssh_security_group" {
 
 resource "aws_security_group" "nfs_security_group" {
   description = "NFS Security Group"
-  name_prefix = "${var.resource_name}-NFSSecurityGroup"
+  name_prefix = "${var.name}-NFSSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -171,7 +182,7 @@ resource "aws_security_group" "nfs_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-NFSSecurityGroup"
+      "Name" = "${var.name}-NFSSecurityGroup"
     },
   )
 
@@ -182,7 +193,7 @@ resource "aws_security_group" "nfs_security_group" {
 
 resource "aws_security_group" "mssql_security_group" {
   description = "MSSQL Security Group"
-  name_prefix = "${var.resource_name}-MSSQLSecurityGroup"
+  name_prefix = "${var.name}-MSSQLSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -202,7 +213,7 @@ resource "aws_security_group" "mssql_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-MSSQLSecurityGroup"
+      "Name" = "${var.name}-MSSQLSecurityGroup"
     },
   )
 
@@ -213,7 +224,7 @@ resource "aws_security_group" "mssql_security_group" {
 
 resource "aws_security_group" "mysql_security_group" {
   description = "MySQL Security Group"
-  name_prefix = "${var.resource_name}-MYSQLSecurityGroup"
+  name_prefix = "${var.name}-MYSQLSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -233,7 +244,7 @@ resource "aws_security_group" "mysql_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-MYSQLSecurityGroup"
+      "Name" = "${var.name}-MYSQLSecurityGroup"
     },
   )
 
@@ -244,7 +255,7 @@ resource "aws_security_group" "mysql_security_group" {
 
 resource "aws_security_group" "public_web_security_group" {
   description = "Public Web Security Group"
-  name_prefix = "${var.resource_name}-PublicWebSecurityGroup"
+  name_prefix = "${var.name}-PublicWebSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -271,7 +282,7 @@ resource "aws_security_group" "public_web_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PublicWebSecurityGroup"
+      "Name" = "${var.name}-PublicWebSecurityGroup"
     },
   )
 
@@ -282,7 +293,7 @@ resource "aws_security_group" "public_web_security_group" {
 
 resource "aws_security_group" "private_web_security_group" {
   description = "Private Web Security Group"
-  name_prefix = "${var.resource_name}-PrivateWebSecurityGroup"
+  name_prefix = "${var.name}-PrivateWebSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -309,7 +320,7 @@ resource "aws_security_group" "private_web_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PrivateWebSecurityGroup"
+      "Name" = "${var.name}-PrivateWebSecurityGroup"
     },
   )
 
@@ -320,7 +331,7 @@ resource "aws_security_group" "private_web_security_group" {
 
 resource "aws_security_group" "private_ecs_security_group" {
   description = "Private ECS Security Group"
-  name_prefix = "${var.resource_name}-PrivateECSSecurityGroup"
+  name_prefix = "${var.name}-PrivateECSSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -340,7 +351,7 @@ resource "aws_security_group" "private_ecs_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PrivateECSSecurityGroup"
+      "Name" = "${var.name}-PrivateECSSecurityGroup"
     },
   )
 
@@ -351,7 +362,7 @@ resource "aws_security_group" "private_ecs_security_group" {
 
 resource "aws_security_group" "efs_security_group" {
   description = "EFS Security Group"
-  name_prefix = "${var.resource_name}-EFSSecurityGroup"
+  name_prefix = "${var.name}-EFSSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -371,7 +382,7 @@ resource "aws_security_group" "efs_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-EFSSecurityGroup"
+      "Name" = "${var.name}-EFSSecurityGroup"
     },
   )
 
@@ -382,7 +393,7 @@ resource "aws_security_group" "efs_security_group" {
 
 resource "aws_security_group" "oracle_security_group" {
   description = "Oracle Security Group"
-  name_prefix = "${var.resource_name}-OracleSecurityGroup"
+  name_prefix = "${var.name}-OracleSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -402,7 +413,7 @@ resource "aws_security_group" "oracle_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-OracleSecurityGroup"
+      "Name" = "${var.name}-OracleSecurityGroup"
     },
   )
 
@@ -413,7 +424,7 @@ resource "aws_security_group" "oracle_security_group" {
 
 resource "aws_security_group" "postgres_security_group" {
   description = "PostgreSQL Security Group"
-  name_prefix = "${var.resource_name}-PostgresSecurityGroup"
+  name_prefix = "${var.name}-PostgresSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -433,7 +444,7 @@ resource "aws_security_group" "postgres_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PostgresSecurityGroup"
+      "Name" = "${var.name}-PostgresSecurityGroup"
     },
   )
 
@@ -444,7 +455,7 @@ resource "aws_security_group" "postgres_security_group" {
 
 resource "aws_security_group" "elastic_cache_memcache_security_group" {
   description = "ElastiCache Memcache Security Group"
-  name_prefix = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
+  name_prefix = "${var.name}-ElasticCacheMemcacheSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -464,7 +475,7 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
+      "Name" = "${var.name}-ElasticCacheMemcacheSecurityGroup"
     },
   )
 
@@ -475,7 +486,7 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
 
 resource "aws_security_group" "redshift_security_group" {
   description = "Redshift Security Group"
-  name_prefix = "${var.resource_name}-RedshiftSecurityGroup"
+  name_prefix = "${var.name}-RedshiftSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -495,7 +506,7 @@ resource "aws_security_group" "redshift_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-RedshiftSecurityGroup"
+      "Name" = "${var.name}-RedshiftSecurityGroup"
     },
   )
 
@@ -506,7 +517,7 @@ resource "aws_security_group" "redshift_security_group" {
 
 resource "aws_security_group" "elastic_cache_redis_security_group" {
   description = "ElastiCache Redis Security Group"
-  name_prefix = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
+  name_prefix = "${var.name}-ElasticCacheRedisSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -526,7 +537,7 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
+      "Name" = "${var.name}-ElasticCacheRedisSecurityGroup"
     },
   )
 
@@ -537,7 +548,7 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
 
 resource "aws_security_group" "private_rdp_security_group" {
   description = "Private RDP Security Group"
-  name_prefix = "${var.resource_name}-PrivateRDPSecurityGroup"
+  name_prefix = "${var.name}-PrivateRDPSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -557,7 +568,7 @@ resource "aws_security_group" "private_rdp_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-PrivateRDPSecurityGroup"
+      "Name" = "${var.name}-PrivateRDPSecurityGroup"
     },
   )
 
@@ -568,7 +579,7 @@ resource "aws_security_group" "private_rdp_security_group" {
 
 resource "aws_security_group" "vpc_endpoint_security_group" {
   description = "VPC Endpoint Security Group"
-  name_prefix = "${var.resource_name}-VpcEndpointSecurityGroup"
+  name_prefix = "${var.name}-VpcEndpointSecurityGroup"
   vpc_id      = var.vpc_id
 
   egress {
@@ -595,7 +606,7 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-VpcEndpointSecurityGroup"
+      "Name" = "${var.name}-VpcEndpointSecurityGroup"
     },
   )
 
@@ -606,14 +617,14 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
 
 resource "aws_security_group" "eks_control_plane_security_group" {
   description            = "EKS Control Plane Security Group"
-  name_prefix            = "${var.resource_name}-EksControlPlaneSecurityGroup"
+  name_prefix            = "${var.name}-EksControlPlaneSecurityGroup"
   revoke_rules_on_delete = true
   vpc_id                 = var.vpc_id
 
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-EksControlPlaneSecurityGroup"
+      "Name" = "${var.name}-EksControlPlaneSecurityGroup"
     },
   )
 
@@ -645,7 +656,7 @@ resource "aws_security_group_rule" "eks_control_plane_egress" {
 
 resource "aws_security_group" "eks_worker_security_group" {
   description            = "EKS Worker Security Group"
-  name_prefix            = "${var.resource_name}-EksWorkerSecurityGroup"
+  name_prefix            = "${var.name}-EksWorkerSecurityGroup"
   revoke_rules_on_delete = true
   vpc_id                 = var.vpc_id
 
@@ -684,7 +695,7 @@ resource "aws_security_group" "eks_worker_security_group" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${var.resource_name}-EksWorkerSecurityGroup"
+      "Name" = "${var.name}-EksWorkerSecurityGroup"
     },
   )
 

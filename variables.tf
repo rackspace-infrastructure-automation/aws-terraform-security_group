@@ -4,7 +4,7 @@ variable "environment" {
   default     = "Development"
 }
 
-variable "resource_name" {
+variable "name" {
   description = "The name to be used for resources provisioned by this module"
   type        = string
 }
