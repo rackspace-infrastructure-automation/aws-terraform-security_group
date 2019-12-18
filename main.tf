@@ -36,26 +36,22 @@ data "aws_vpc" "selected" {
 }
 
 resource "aws_security_group" "public_rdp_security_group" {
-  name_prefix = "${var.resource_name}-PublicRDPSecurityGroup"
   description = "Public RDP Security Group"
+  name_prefix = "${var.resource_name}-PublicRDPSecurityGroup"
   vpc_id      = var.vpc_id
 
-  ingress {
-    from_port   = 3389
-    to_port     = 3389
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
   }
 
-  lifecycle {
-    create_before_destroy = true
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 3389
+    protocol    = "tcp"
+    to_port     = 3389
   }
 
   tags = merge(
@@ -64,29 +60,29 @@ resource "aws_security_group" "public_rdp_security_group" {
       "Name" = "${var.resource_name}-PublicRDPSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "public_ssh_security_group" {
-  name_prefix = "${var.resource_name}-PublicSSHSecurityGroup"
-  description = "Public SSH Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "public_ssh_security_group" {
+  description = "Public SSH Security Group"
+  name_prefix = "${var.resource_name}-PublicSSHSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 22
+    protocol    = "tcp"
+    to_port     = 22
   }
 
   tags = merge(
@@ -95,29 +91,29 @@ resource "aws_security_group" "public_ssh_security_group" {
       "Name" = "${var.resource_name}-PublicSSHSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "private_ssh_security_group" {
-  name_prefix = "${var.resource_name}-PrivateSSHSecurityGroup"
-  description = "Private SSH Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_ssh_security_group.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "private_ssh_security_group" {
+  description = "Private SSH Security Group"
+  name_prefix = "${var.resource_name}-PrivateSSHSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    from_port       = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_ssh_security_group.id]
+    to_port         = 22
   }
 
   tags = merge(
@@ -126,50 +122,50 @@ resource "aws_security_group" "private_ssh_security_group" {
       "Name" = "${var.resource_name}-PrivateSSHSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "nfs_security_group" {
-  name_prefix = "${var.resource_name}-NFSSecurityGroup"
-  description = "NFS Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 111
-    to_port     = 111
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  ingress {
-    from_port   = 111
-    to_port     = 111
-    protocol    = "udp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  ingress {
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  ingress {
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "udp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "nfs_security_group" {
+  description = "NFS Security Group"
+  name_prefix = "${var.resource_name}-NFSSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 111
+    protocol    = "tcp"
+    to_port     = 111
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 111
+    protocol    = "udp"
+    to_port     = 111
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 2049
+    protocol    = "tcp"
+    to_port     = 2049
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 2049
+    protocol    = "udp"
+    to_port     = 2049
   }
 
   tags = merge(
@@ -178,29 +174,29 @@ resource "aws_security_group" "nfs_security_group" {
       "Name" = "${var.resource_name}-NFSSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "mssql_security_group" {
-  name_prefix = "${var.resource_name}-MSSQLSecurityGroup"
-  description = "MSSQL Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 1433
-    to_port     = 1433
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "mssql_security_group" {
+  description = "MSSQL Security Group"
+  name_prefix = "${var.resource_name}-MSSQLSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 1433
+    protocol    = "tcp"
+    to_port     = 1433
   }
 
   tags = merge(
@@ -209,29 +205,29 @@ resource "aws_security_group" "mssql_security_group" {
       "Name" = "${var.resource_name}-MSSQLSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "mysql_security_group" {
-  name_prefix = "${var.resource_name}-MYSQLSecurityGroup"
-  description = "MySQL Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "mysql_security_group" {
+  description = "MySQL Security Group"
+  name_prefix = "${var.resource_name}-MYSQLSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 3306
+    protocol    = "tcp"
+    to_port     = 3306
   }
 
   tags = merge(
@@ -240,36 +236,36 @@ resource "aws_security_group" "mysql_security_group" {
       "Name" = "${var.resource_name}-MYSQLSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "public_web_security_group" {
-  name_prefix = "${var.resource_name}-PublicWebSecurityGroup"
-  description = "Public Web Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "public_web_security_group" {
+  description = "Public Web Security Group"
+  name_prefix = "${var.resource_name}-PublicWebSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
   }
 
   tags = merge(
@@ -278,36 +274,36 @@ resource "aws_security_group" "public_web_security_group" {
       "Name" = "${var.resource_name}-PublicWebSecurityGroup"
     },
   )
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group" "private_web_security_group" {
-  name_prefix = "${var.resource_name}-PrivateWebSecurityGroup"
   description = "Private Web Security Group"
+  name_prefix = "${var.resource_name}-PrivateWebSecurityGroup"
   vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
 
   ingress {
     from_port       = 80
-    to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.public_web_security_group.id]
+    to_port         = 80
   }
 
   ingress {
     from_port       = 443
-    to_port         = 443
     protocol        = "tcp"
     security_groups = [aws_security_group.public_web_security_group.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  lifecycle {
-    create_before_destroy = true
+    to_port         = 443
   }
 
   tags = merge(
@@ -316,29 +312,29 @@ resource "aws_security_group" "private_web_security_group" {
       "Name" = "${var.resource_name}-PrivateWebSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "private_ecs_security_group" {
-  name_prefix = "${var.resource_name}-PrivateECSSecurityGroup"
-  description = "Private ECS Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port       = 32768
-    to_port         = 61000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_web_security_group.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "private_ecs_security_group" {
+  description = "Private ECS Security Group"
+  name_prefix = "${var.resource_name}-PrivateECSSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    from_port       = 32768
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_web_security_group.id]
+    to_port         = 61000
   }
 
   tags = merge(
@@ -347,29 +343,29 @@ resource "aws_security_group" "private_ecs_security_group" {
       "Name" = "${var.resource_name}-PrivateECSSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "efs_security_group" {
-  name_prefix = "${var.resource_name}-EFSSecurityGroup"
-  description = "EFS Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "efs_security_group" {
+  description = "EFS Security Group"
+  name_prefix = "${var.resource_name}-EFSSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 2049
+    protocol    = "tcp"
+    to_port     = 2049
   }
 
   tags = merge(
@@ -378,29 +374,29 @@ resource "aws_security_group" "efs_security_group" {
       "Name" = "${var.resource_name}-EFSSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "oracle_security_group" {
-  name_prefix = "${var.resource_name}-OracleSecurityGroup"
-  description = "Oracle Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 1521
-    to_port     = 1521
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "oracle_security_group" {
+  description = "Oracle Security Group"
+  name_prefix = "${var.resource_name}-OracleSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 1521
+    protocol    = "tcp"
+    to_port     = 1521
   }
 
   tags = merge(
@@ -409,29 +405,29 @@ resource "aws_security_group" "oracle_security_group" {
       "Name" = "${var.resource_name}-OracleSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "postgres_security_group" {
-  name_prefix = "${var.resource_name}-PostgresSecurityGroup"
-  description = "PostgreSQL Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "postgres_security_group" {
+  description = "PostgreSQL Security Group"
+  name_prefix = "${var.resource_name}-PostgresSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 5432
+    protocol    = "tcp"
+    to_port     = 5432
   }
 
   tags = merge(
@@ -440,29 +436,29 @@ resource "aws_security_group" "postgres_security_group" {
       "Name" = "${var.resource_name}-PostgresSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "elastic_cache_memcache_security_group" {
-  name_prefix = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
-  description = "ElastiCache Memcache Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 11211
-    to_port     = 11211
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "elastic_cache_memcache_security_group" {
+  description = "ElastiCache Memcache Security Group"
+  name_prefix = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 11211
+    protocol    = "tcp"
+    to_port     = 11211
   }
 
   tags = merge(
@@ -471,29 +467,29 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
       "Name" = "${var.resource_name}-ElasticCacheMemcacheSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "redshift_security_group" {
-  name_prefix = "${var.resource_name}-RedshiftSecurityGroup"
-  description = "Redshift Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 5439
-    to_port     = 5439
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "redshift_security_group" {
+  description = "Redshift Security Group"
+  name_prefix = "${var.resource_name}-RedshiftSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 5439
+    protocol    = "tcp"
+    to_port     = 5439
   }
 
   tags = merge(
@@ -502,29 +498,29 @@ resource "aws_security_group" "redshift_security_group" {
       "Name" = "${var.resource_name}-RedshiftSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "elastic_cache_redis_security_group" {
-  name_prefix = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
-  description = "ElastiCache Redis Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "elastic_cache_redis_security_group" {
+  description = "ElastiCache Redis Security Group"
+  name_prefix = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    from_port   = 6379
+    protocol    = "tcp"
+    to_port     = 6379
   }
 
   tags = merge(
@@ -533,29 +529,29 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
       "Name" = "${var.resource_name}-ElasticCacheRedisSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "private_rdp_security_group" {
-  name_prefix = "${var.resource_name}-PrivateRDPSecurityGroup"
-  description = "Private RDP Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port       = 3389
-    to_port         = 3389
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_rdp_security_group.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "private_rdp_security_group" {
+  description = "Private RDP Security Group"
+  name_prefix = "${var.resource_name}-PrivateRDPSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    from_port       = 3389
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_rdp_security_group.id]
+    to_port         = 3389
   }
 
   tags = merge(
@@ -564,36 +560,36 @@ resource "aws_security_group" "private_rdp_security_group" {
       "Name" = "${var.resource_name}-PrivateRDPSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "vpc_endpoint_security_group" {
-  name_prefix = "${var.resource_name}-VpcEndpointSecurityGroup"
-  description = "VPC Endpoint Security Group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "vpc_endpoint_security_group" {
+  description = "VPC Endpoint Security Group"
+  name_prefix = "${var.resource_name}-VpcEndpointSecurityGroup"
+  vpc_id      = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
   }
 
   tags = merge(
@@ -602,17 +598,17 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
       "Name" = "${var.resource_name}-VpcEndpointSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group" "eks_control_plane_security_group" {
-  name_prefix            = "${var.resource_name}-EksControlPlaneSecurityGroup"
-  description            = "EKS Control Plane Security Group"
-  revoke_rules_on_delete = true
-  vpc_id                 = var.vpc_id
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_security_group" "eks_control_plane_security_group" {
+  description            = "EKS Control Plane Security Group"
+  name_prefix            = "${var.resource_name}-EksControlPlaneSecurityGroup"
+  revoke_rules_on_delete = true
+  vpc_id                 = var.vpc_id
 
   tags = merge(
     local.tags,
@@ -620,70 +616,69 @@ resource "aws_security_group" "eks_control_plane_security_group" {
       "Name" = "${var.resource_name}-EksControlPlaneSecurityGroup"
     },
   )
-}
-
-resource "aws_security_group_rule" "eks_control_plane_ingress" {
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.eks_worker_security_group.id
-  description              = "Allow ingress HTTPS traffic from worker"
-
-  security_group_id = aws_security_group.eks_control_plane_security_group.id
-}
-
-resource "aws_security_group_rule" "eks_control_plane_egress" {
-  type                     = "egress"
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "all"
-  source_security_group_id = aws_security_group.eks_worker_security_group.id
-  description              = "Allow all egress traffic to EKS worker nodes"
-
-  security_group_id = aws_security_group.eks_control_plane_security_group.id
-}
-
-resource "aws_security_group" "eks_worker_security_group" {
-  name_prefix            = "${var.resource_name}-EksWorkerSecurityGroup"
-  description            = "EKS Worker Security Group"
-  revoke_rules_on_delete = true
-  vpc_id                 = var.vpc_id
-
-  ingress {
-    from_port       = 1025
-    to_port         = 65535
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_web_security_group.id]
-    description     = "Allow ingress traffic from public web server security group"
-  }
-
-  ingress {
-    from_port       = 1025
-    to_port         = 65535
-    protocol        = "tcp"
-    security_groups = [aws_security_group.eks_control_plane_security_group.id]
-    description     = "Allow ingress traffic from EKS control plane security group"
-  }
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    self        = true
-    description = "Allow all ingress traffic from other members of this security group"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all egress traffic"
-  }
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group_rule" "eks_control_plane_ingress" {
+  description              = "Allow ingress HTTPS traffic from worker"
+  from_port                = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks_control_plane_security_group.id
+  source_security_group_id = aws_security_group.eks_worker_security_group.id
+  to_port                  = 443
+  type                     = "ingress"
+}
+
+resource "aws_security_group_rule" "eks_control_plane_egress" {
+  description              = "Allow all egress traffic to EKS worker nodes"
+  from_port                = 0
+  protocol                 = "all"
+  security_group_id        = aws_security_group.eks_control_plane_security_group.id
+  source_security_group_id = aws_security_group.eks_worker_security_group.id
+  to_port                  = 65535
+  type                     = "egress"
+
+}
+
+resource "aws_security_group" "eks_worker_security_group" {
+  description            = "EKS Worker Security Group"
+  name_prefix            = "${var.resource_name}-EksWorkerSecurityGroup"
+  revoke_rules_on_delete = true
+  vpc_id                 = var.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all egress traffic"
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    description     = "Allow ingress traffic from public web server security group"
+    from_port       = 1025
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_web_security_group.id]
+    to_port         = 65535
+  }
+
+  ingress {
+    description     = "Allow ingress traffic from EKS control plane security group"
+    from_port       = 1025
+    protocol        = "tcp"
+    security_groups = [aws_security_group.eks_control_plane_security_group.id]
+    to_port         = 65535
+  }
+
+  ingress {
+    description = "Allow all ingress traffic from other members of this security group"
+    from_port   = 0
+    protocol    = "-1"
+    self        = true
+    to_port     = 0
   }
 
   tags = merge(
@@ -692,4 +687,8 @@ resource "aws_security_group" "eks_worker_security_group" {
       "Name" = "${var.resource_name}-EksWorkerSecurityGroup"
     },
   )
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
