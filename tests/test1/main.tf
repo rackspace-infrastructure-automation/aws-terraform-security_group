@@ -16,6 +16,9 @@ module "base_network" {
 module "test_sg" {
   source = "../../module"
 
-  name   = "my_test_sg"
+  name = "my_test_sg"
+  tags = {
+    App = "Test"
+  }
   vpc_id = module.base_network.vpc_id
 }

@@ -1,30 +1,33 @@
-/**
+/*
  * # aws-terraform-security_group
  *
- *This module creates the standard security groups for use on an account.
+ * This module creates the standard security groups for use on an account.
  *
- *## Basic Usage
+ * ## Basic Usage
  *
- *```HCL
- *module "security_groups" {
- *  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.12.0"
+ * ```HCL
+ * module "security_groups" {
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.12.1"
  *
- *  name = "Test-SG"
- *  vpc_id        = "${module.vpc.vpc_id}"
- *  environment   = "Production"
- *}
- *```
+ *   name = "Test-SG"
+ *   tags   = {
+ *     App = "Test"
+ *   }
+ *   vpc_id        = "${module.vpc.vpc_id}"
+ *   environment   = "Production"
+ * }
+ * ```
  *
- *## Terraform 0.12 upgrade
+ * ## Terraform 0.12 upgrade
  *
- *Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
- *made when upgrading from a previous release to version 0.12.0 or higher.
+ * Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
+ * made when upgrading from a previous release to version 0.12.0 or higher.
  *
- *### Module variables
+ * ### Module variables
  *
- *The following module variables were updated to better meet current Rackspace style guides:
+ * The following module variables were updated to better meet current Rackspace style guides:
  *
- *- `resource_name` -> `name`
+ * - `resource_name` -> `name`
  */
 
 terraform {
@@ -66,6 +69,7 @@ resource "aws_security_group" "public_rdp_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PublicRDPSecurityGroup"
@@ -97,6 +101,7 @@ resource "aws_security_group" "public_ssh_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PublicSSHSecurityGroup"
@@ -128,6 +133,7 @@ resource "aws_security_group" "private_ssh_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PrivateSSHSecurityGroup"
@@ -180,6 +186,7 @@ resource "aws_security_group" "nfs_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-NFSSecurityGroup"
@@ -211,6 +218,7 @@ resource "aws_security_group" "mssql_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-MSSQLSecurityGroup"
@@ -242,6 +250,7 @@ resource "aws_security_group" "mysql_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-MYSQLSecurityGroup"
@@ -280,6 +289,7 @@ resource "aws_security_group" "public_web_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PublicWebSecurityGroup"
@@ -318,6 +328,7 @@ resource "aws_security_group" "private_web_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PrivateWebSecurityGroup"
@@ -349,6 +360,7 @@ resource "aws_security_group" "private_ecs_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PrivateECSSecurityGroup"
@@ -380,6 +392,7 @@ resource "aws_security_group" "efs_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-EFSSecurityGroup"
@@ -411,6 +424,7 @@ resource "aws_security_group" "oracle_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-OracleSecurityGroup"
@@ -442,6 +456,7 @@ resource "aws_security_group" "postgres_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PostgresSecurityGroup"
@@ -473,6 +488,7 @@ resource "aws_security_group" "elastic_cache_memcache_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-ElasticCacheMemcacheSecurityGroup"
@@ -504,6 +520,7 @@ resource "aws_security_group" "redshift_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-RedshiftSecurityGroup"
@@ -535,6 +552,7 @@ resource "aws_security_group" "elastic_cache_redis_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-ElasticCacheRedisSecurityGroup"
@@ -566,6 +584,7 @@ resource "aws_security_group" "private_rdp_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-PrivateRDPSecurityGroup"
@@ -604,6 +623,7 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-VpcEndpointSecurityGroup"
@@ -622,6 +642,7 @@ resource "aws_security_group" "eks_control_plane_security_group" {
   vpc_id                 = var.vpc_id
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-EksControlPlaneSecurityGroup"
@@ -693,6 +714,7 @@ resource "aws_security_group" "eks_worker_security_group" {
   }
 
   tags = merge(
+    var.tags,
     local.tags,
     {
       "Name" = "${var.name}-EksWorkerSecurityGroup"

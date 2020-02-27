@@ -9,6 +9,12 @@ variable "name" {
   type        = string
 }
 
+variable "tags" {
+  description = "A map of tags to apply to all resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "vpc_id" {
   description = "Provide Virtual Private Cloud ID in which security groups will be deployed"
   type        = string
