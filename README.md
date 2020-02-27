@@ -6,11 +6,14 @@ This module creates the standard security groups for use on an account.
 
 ```HCL
 module "security_groups" {
- source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.12.0"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group//?ref=v0.12.1"
 
- name = "Test-SG"
- vpc_id        = "${module.vpc.vpc_id}"
- environment   = "Production"
+  name = "Test-SG"
+  tags   = {
+    App = "Test"
+  }
+  vpc_id        = "${module.vpc.vpc_id}"
+  environment   = "Production"
 }
 ```
 
@@ -37,6 +40,7 @@ The following module variables were updated to better meet current Rackspace sty
 |------|-------------|------|---------|:-----:|
 | environment | Application environment for which this network is being created. Preferred values are Development, Integration, PreProduction, Production, QA, Staging, or Test | `string` | `"Development"` | no |
 | name | The name to be used for resources provisioned by this module | `string` | n/a | yes |
+| tags | A map of tags to apply to all resources. | `map(string)` | `{}` | no |
 | vpc\_id | Provide Virtual Private Cloud ID in which security groups will be deployed | `string` | n/a | yes |
 
 ## Outputs
