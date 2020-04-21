@@ -706,6 +706,14 @@ resource "aws_security_group" "eks_worker_security_group" {
   }
 
   ingress {
+    description     = "Allow secure ingress traffic from EKS control plane security group"
+    from_port       = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.eks_control_plane_security_group.id]
+    to_port         = 443
+  }
+
+  ingress {
     description = "Allow all ingress traffic from other members of this security group"
     from_port   = 0
     protocol    = "-1"
